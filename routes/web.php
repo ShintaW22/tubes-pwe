@@ -10,4 +10,12 @@ Route::get('/', function () {
     return view('welcome'); 
 });
 
+Route::get('/shinta', function () {
+    return view('halaman');
+});
+
+Route::get('/prmd', function () {
+    return view('1halaman');
+});
+
 
