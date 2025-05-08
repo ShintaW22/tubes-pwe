@@ -66,7 +66,7 @@ class PrabotanController extends Controller
 
     // Hapus data
     public function destroy($id)
-    {
+    { 
         $prabotan = Prabotan::findOrFail($id);
         $prabotan->delete();
 
