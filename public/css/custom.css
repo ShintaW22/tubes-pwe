@@ -1,0 +1,44 @@
+/* ========== CUSTOM LOGIN & REGISTER STYLE ========== */
+
+/* Background Halaman */
+body {
+    background-color: #f0f4f8;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Card Soft */
+.card.soft {
+    background-color: #ffffff;
+    border-radius: 12px;
+    border: 1px solid #6b8bb0;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+/* Label Form */
+.form-label {
+    font-weight: 500;
+    color: #333;
+}
+
+/* Tombol Soft Primary */
+.btn-soft-primary {
+    background-color: #326a9b;
+    border: none;
+    color: rgb(110, 81, 81);
+    transition: background-color 0.3s ease;
+}
+
+.btn-soft-primary:hover {
+    background-color: #043564;
+}
+
+/* Text Hint */
+.text-muted {
+    color: #6c757d !important;
+}
+
+/* Link Hover */
+a:hover {
+    color: #1e578d;
+    text-decoration: none;
+}

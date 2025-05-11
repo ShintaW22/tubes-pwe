@@ -1,0 +1,49 @@
+/* ====== CUSTOM REGISTER PAGE STYLE ====== */
+
+/* Background Halaman */
+body {
+    background-color: #fefefe;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Card Tampilan */
+.card.soft {
+    background-color: #ffffff;
+    border-radius: 14px;
+    border: 1px solid #e6e6e6;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.04);
+}
+
+/* Label Input */
+.form-label {
+    font-weight: 600;
+    color: #2a2e33;
+}
+
+/* Input Style */
+.form-control {
+    border-radius: 8px;
+}
+
+/* Tombol Daftar */
+.btn-soft-primary {
+    background-color: #7bc47f; /* Hijau pastel */
+    border: none;
+    color: white;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn-soft-primary:hover {
+    background-color: #5ea265;
+}
+
+/* Text Kecil dan Link */
+.text-muted {
+    color: #7a7a7a !important;
+}
+
+a:hover {
+    color: #5ea265;
+    text-decoration: none;
+}
