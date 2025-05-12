@@ -5,17 +5,13 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
 
 class RegisterController extends Controller
 {
     /**
      * Show the registration form.
-     *
-     * @return \Illuminate\View\View
      */
     public function showRegistrationForm()
     {
@@ -24,30 +20,29 @@ class RegisterController extends Controller
 
     /**
      * Handle the registration request.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\RedirectResponse
      */
     public function register(Request $request)
     {
-        // Validasi input
+        // Validasi data input
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
         ]);
 
-        // Membuat pengguna baru
+        // Simpan user ke database
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'role' => 'user', // default role
+            'is_admin' => false,
         ]);
 
-        // Login pengguna setelah berhasil registrasi
+        // Login otomatis
         Auth::login($user);
 
-        // Redirect ke halaman dashboard
-        return redirect('/dashboard');
+        // Redirect ke dashboard user
+        return redirect()->route('user.dashboard');
     }
 }

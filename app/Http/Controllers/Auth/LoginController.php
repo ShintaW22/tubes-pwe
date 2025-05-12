@@ -10,8 +10,6 @@ class LoginController extends Controller
 {
     /**
      * Show the login form.
-     *
-     * @return \Illuminate\View\View
      */
     public function showLoginForm()
     {
@@ -19,33 +17,40 @@ class LoginController extends Controller
     }
 
     /**
-     * Handle the login attempt.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\RedirectResponse
+     * Handle the login request.
      */
     public function login(Request $request)
     {
-        // Validasi input
+        // Validasi form
         $request->validate([
             'email' => 'required|email',
             'password' => 'required',
         ]);
 
-        // Cek kredensial login
-        if (Auth::attempt(['email' => $request->email, 'password' => $request->password], $request->remember)) {
-            // Redirect ke halaman home setelah berhasil login
-            return redirect()->intended('dashboard');
+        // Coba login
+        if (Auth::attempt([
+            'email' => $request->email,
+            'password' => $request->password
+        ], $request->remember)) {
+
+            $user = Auth::user();
+
+            // Arahkan berdasarkan role
+            if ($user->role === 'admin' && $user->is_admin) {
+                return redirect()->route('admin.dashboard');
+            }
+
+            return redirect()->route('user.dashboard');
         }
 
-        // Jika gagal login, kembali ke halaman login dengan error
-        return back()->withErrors(['email' => 'The provided credentials do not match our records.']);
+        // Jika gagal login
+        return back()->withErrors([
+            'email' => 'Email atau password salah.',
+        ])->withInput();
     }
 
     /**
-     * Logout the user.
-     *
-     * @return \Illuminate\Http\RedirectResponse
+     * Logout user.
      */
     public function logout()
     {
