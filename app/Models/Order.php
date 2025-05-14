@@ -5,16 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Product extends Model
+class Order extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'name', 'description', 'price', 'stock', 'image',
+        'user_id', 'total_price', 'status', 'payment_method',
     ];
 
-    public function getImageUrlAttribute()
+    public function user()
     {
-        return asset('storage/products/' . $this->image);
+        return $this->belongsTo(User::class);
     }
 }

@@ -10,30 +10,20 @@ class User extends Authenticatable
 {
     use Notifiable, HasFactory;
 
-    /**
-     * Kolom yang boleh diisi (mass assignable).
-     */
     protected $fillable = [
-        'name',
-        'email',
-        'password',
-        'role',
-        'is_admin',
+        'name', 'email', 'password', 'role', 'is_admin'
     ];
 
-    /**
-     * Kolom yang disembunyikan saat serialisasi (misal saat dikirim ke view/JSON).
-     */
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
-
-    /**
-     * Kolom dengan casting otomatis.
-     */
     protected $casts = [
-        'email_verified_at' => 'datetime',
         'is_admin' => 'boolean',
     ];
+
+    public static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($user) {
+            $user->password = bcrypt($user->password);
+        });
+    }
 }

@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Product;
+use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
@@ -23,14 +23,24 @@ class ProductController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
             'price' => 'required|numeric',
             'stock' => 'required|integer',
+            'image' => 'required|image|mimes:jpg,jpeg,png,gif|max:2048',
         ]);
 
-        Product::create($request->all());
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('public/products');
+        }
 
-        return redirect()->route('admin.products.index')->with('success', 'Produk berhasil ditambahkan.');
+        Product::create([
+            'name' => $request->name,
+            'description' => $request->description,
+            'price' => $request->price,
+            'stock' => $request->stock,
+            'image' => basename($imagePath),
+        ]);
+
+        return redirect()->route('admin.products.index');
     }
 
     public function edit($id)
@@ -45,14 +55,19 @@ class ProductController extends Controller
 
         $request->validate([
             'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
             'price' => 'required|numeric',
             'stock' => 'required|integer',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
         ]);
 
-        $product->update($request->all());
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('public/products');
+            $product->image = basename($imagePath);
+        }
 
-        return redirect()->route('admin.products.index')->with('success', 'Produk berhasil diperbarui.');
+        $product->update($request->except('image'));
+
+        return redirect()->route('admin.products.index');
     }
 
     public function destroy($id)
@@ -60,6 +75,6 @@ class ProductController extends Controller
         $product = Product::findOrFail($id);
         $product->delete();
 
-        return redirect()->route('admin.products.index')->with('success', 'Produk berhasil dihapus.');
+        return redirect()->route('admin.products.index');
     }
 }

@@ -1,8 +1,8 @@
-@extends('layouts.app')
+@extends('layouts.user')
+
+@section('title', 'User Dashboard')
 
 @section('content')
-<div class="container mt-5">
-    <h2>👑 Selamat Datang User!</h2>
-    <p>Ini adalah halaman dashboard khusus User.</p>
-</div>
+    <h1>Welcome to Your Dashboard</h1>
+    <p>Browse products, manage your orders, and checkout here.</p>
 @endsection

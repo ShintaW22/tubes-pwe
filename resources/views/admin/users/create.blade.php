@@ -1,42 +1,37 @@
 @extends('layouts.admin')
 
+@section('title', 'Manage Users')
+
 @section('content')
-<div class="container">
-    <h2 class="mb-4">Tambah Pengguna Baru</h2>
+    <h1>Manage Users</h1>
 
-    <form action="{{ route('admin.users.store') }}" method="POST">
-        @csrf
+    <a href="{{ route('admin.users.create') }}" class="btn btn-success mb-3">Add New User</a>
 
-        <div class="mb-3">
-            <label for="name" class="form-label">Nama</label>
-            <input type="text" name="name" class="form-control" value="{{ old('name') }}" required>
-        </div>
-
-        <div class="mb-3">
-            <label for="email" class="form-label">Email</label>
-            <input type="email" name="email" class="form-control" value="{{ old('email') }}" required>
-        </div>
-
-        <div class="mb-3">
-            <label for="role" class="form-label">Role</label>
-            <select name="role" class="form-select" required>
-                <option value="user" selected>User</option>
-                <option value="admin">Admin</option>
-            </select>
-        </div>
-
-        <div class="mb-3">
-            <label for="password" class="form-label">Password</label>
-            <input type="password" name="password" class="form-control" required>
-        </div>
-
-        <div class="mb-3">
-            <label for="password_confirmation" class="form-label">Konfirmasi Password</label>
-            <input type="password" name="password_confirmation" class="form-control" required>
-        </div>
-
-        <button class="btn btn-success" type="submit">Simpan</button>
-        <a href="{{ route('admin.users.index') }}" class="btn btn-secondary">Kembali</a>
-    </form>
-</div>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach ($users as $user)
+                <tr>
+                    <td>{{ $user->name }}</td>
+                    <td>{{ $user->email }}</td>
+                    <td>{{ $user->role }}</td>
+                    <td>
+                        <a href="{{ route('admin.users.edit', $user->id) }}" class="btn btn-warning btn-sm">Edit</a>
+                        <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this user?')">
+                            @csrf
+                            @method('DELETE')
+                            <button class="btn btn-danger btn-sm">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
 @endsection

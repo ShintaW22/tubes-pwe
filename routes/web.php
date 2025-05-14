@@ -1,46 +1,44 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\Auth\RegisterController;
-use App\Http\Controllers\AdminController;
-use App\Http\Controllers\UserController; // untuk user biasa
-use App\Http\Controllers\PrabotanController; // jika tetap dipakai user
+use Illuminate\Routing\Route;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CartController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\AkunController; 
 
-// Halaman utama
-Route::get('/', function () {
-    return view('welcome');
+// Rute Login dan Logout
+Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [AuthController::class, 'login']);
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+// Rute untuk Admin
+Route::group(['name' => 'admin.'], function () {
+    Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('dashboard');
+    Route::resource('/admin/products', ProductController::class);  // Rute untuk produk
+    Route::resource('/admin/users', AkunController::class);        // Rute untuk mengelola pengguna (akun)
 });
 
-// -------------------------
-// AUTHENTICATION
-// -------------------------
-Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
-Route::post('/login', [LoginController::class, 'login']);
-Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
-
-Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
-Route::post('/register', [RegisterController::class, 'register']);
-
-// -------------------------
-// ADMIN AREA
-// -------------------------
-Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
-    Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
-
-    // CRUD user dari admin
-    Route::resource('/users', App\Http\Controllers\Admin\UserController::class);
-
-    // CRUD barang/produk dari admin
-    Route::resource('/products', App\Http\Controllers\Admin\ProductController::class);
-});
-
-// -------------------------
-// USER AREA
-// -------------------------
-Route::middleware(['auth'])->group(function () {
+// Rute untuk User
+Route::group(function () {
     Route::get('/user/dashboard', [UserController::class, 'index'])->name('user.dashboard');
+    
+    // Melihat daftar produk
+    Route::get('/user/products', [UserController::class, 'showProducts'])->name('user.products.index');
 
-    // Jika prabotan dipakai untuk user
-    Route::resource('/prabotan', PrabotanController::class);
+    // Melihat detail produk
+    Route::get('/user/products/{id}', [UserController::class, 'showProduct'])->name('user.products.show');
+    
+    // Mengelola keranjang belanja
+    Route::get('/user/cart', [UserController::class, 'showCart'])->name('user.cart.index');
+    Route::post('/user/cart/{productId}', [UserController::class, 'addToCart'])->name('user.cart.add');
+    Route::delete('/user/cart/{cartId}', [UserController::class, 'removeFromCart'])->name('user.cart.remove');
+
+    // Menyelesaikan pesanan (Checkout)
+    Route::post('/user/checkout', [OrderController::class, 'checkout'])->name('user.checkout');
+
+    // Riwayat pesanan
+    Route::get('/user/orders', [UserController::class, 'showOrders'])->name('user.orders.index');
 });

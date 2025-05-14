@@ -3,14 +3,14 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
-class UserController extends Controller
+class AkunController extends Controller
 {
     /**
-     * Tampilkan daftar semua user.
+     * Menampilkan daftar semua akun pengguna
      */
     public function index()
     {
@@ -19,7 +19,7 @@ class UserController extends Controller
     }
 
     /**
-     * Tampilkan form tambah user.
+     * Menampilkan form untuk menambah akun pengguna
      */
     public function create()
     {
@@ -27,7 +27,7 @@ class UserController extends Controller
     }
 
     /**
-     * Simpan user baru ke database.
+     * Menyimpan akun pengguna baru ke dalam database
      */
     public function store(Request $request)
     {
@@ -46,11 +46,11 @@ class UserController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
-        return redirect()->route('admin.users.index')->with('success', 'User berhasil ditambahkan.');
+        return redirect()->route('admin.users.index')->with('success', 'Akun pengguna berhasil ditambahkan.');
     }
 
     /**
-     * Tampilkan form edit user.
+     * Menampilkan form untuk mengedit data akun pengguna
      */
     public function edit($id)
     {
@@ -59,7 +59,7 @@ class UserController extends Controller
     }
 
     /**
-     * Simpan perubahan data user.
+     * Memperbarui data akun pengguna
      */
     public function update(Request $request, $id)
     {
@@ -78,17 +78,17 @@ class UserController extends Controller
             'is_admin' => $request->role === 'admin',
         ]);
 
-        return redirect()->route('admin.users.index')->with('success', 'User berhasil diupdate.');
+        return redirect()->route('admin.users.index')->with('success', 'Akun pengguna berhasil diperbarui.');
     }
 
     /**
-     * Hapus user.
+     * Menghapus akun pengguna
      */
     public function destroy($id)
     {
         $user = User::findOrFail($id);
         $user->delete();
 
-        return redirect()->route('admin.users.index')->with('success', 'User berhasil dihapus.');
+        return redirect()->route('admin.users.index')->with('success', 'Akun pengguna berhasil dihapus.');
     }
 }
